@@ -1,0 +1,53 @@
+schemaVersion: 2.2.2
+metadata:
+  name: react-web-app
+projects:
+  - name: react-web-app
+    zip:
+      location: https://eclipse-che.github.io/che-devfile-registry/7.86.0/resources/v2/react-web-app.zip
+components:
+  - name: tools
+    container:
+      image: quay.io/devfile/universal-developer-image:ubi8-latest
+      endpoints:
+        - exposure: public
+          name: nodejs
+          protocol: https
+          targetPort: 3000
+      memoryLimit: 1G
+      mountSources: true
+commands:
+  - id: install-dependencies
+    exec:
+      label: Install all required dependencies
+      component: tools
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: yarn install
+      group:
+        kind: build
+        isDefault: true
+  - id: build
+    exec:
+      label: Build the app
+      component: tools
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: NODE_OPTIONS=--openssl-legacy-provider yarn build
+      group:
+        kind: build
+        isDefault: true
+  - id: run
+    exec:
+      label: Run the web app
+      component: tools
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: NODE_OPTIONS=--openssl-legacy-provider yarn start
+      group:
+        kind: run
+  - id: test
+    exec:
+      label: Launch tests
+      component: tools
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: NODE_OPTIONS=--openssl-legacy-provider yarn test
+      group:
+        kind: test
