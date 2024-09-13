@@ -6,6 +6,12 @@ projects:
     zip:
       location: https://eclipse-che.github.io/che-devfile-registry/7.86.0/resources/v2/react-web-app.zip
 components:
+  - name: vol-test
+    volume:
+        size: 3Gi
+  - name: smol-test
+    volume:
+        size: 3Gi
   - name: tools
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
