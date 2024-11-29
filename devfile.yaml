@@ -8,6 +8,7 @@ components:
       cpuLimit: 500m
       cpuRequest: 30m
       image: quay.io/che-incubator/che-code
+      args: ['tail', '-f', '/dev/null']
       memoryLimit: 256Mi
       memoryRequest: 32Mi
       volumeMounts:
