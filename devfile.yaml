@@ -1,59 +1,19 @@
-schemaVersion: 2.2.2
+schemaVersion: 2.1.0
 metadata:
-  name: react-web-app
-projects:
-  - name: react-web-app
-    zip:
-      location: https://eclipse-che.github.io/che-devfile-registry/7.86.0/resources/v2/react-web-app.zip
+  name: version
 components:
-  - name: vol-test
-    volume:
-        size: 3Gi
-  - name: smol-test
-    volume:
-        size: 3Gi
   - name: tools
     container:
-      image: quay.io/devfile/universal-developer-image:ubi8-latest
+      image: quay.io/che-incubator/che-code
+      args: ['tail', '-f', '/dev/null']
       endpoints:
         - exposure: public
           name: nodejs
-          protocol: https
+          protocol: http
           targetPort: 3000
-      memoryLimit: 1G
+      memoryLimit: 2Gi
+      memoryRequest: 256Mi
       mountSources: true
-commands:
-  - id: install-dependencies
-    exec:
-      label: Install all required dependencies
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: yarn install
-      group:
-        kind: build
-        isDefault: true
-  - id: build
-    exec:
-      label: Build the app
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: NODE_OPTIONS=--openssl-legacy-provider yarn build
-      group:
-        kind: build
-        isDefault: true
-  - id: run
-    exec:
-      label: Run the web app
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: NODE_OPTIONS=--openssl-legacy-provider yarn start
-      group:
-        kind: run
-  - id: test
-    exec:
-      label: Launch tests
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: NODE_OPTIONS=--openssl-legacy-provider yarn test
-      group:
-        kind: test
+      env:
+        - name: VSCODE_TRUSTED_EXTENSIONS
+          value: "GitHub.copilot,GitHub.copilot-chat"
