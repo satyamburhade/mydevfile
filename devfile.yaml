@@ -36,5 +36,5 @@ commands:
         - run-app
       parallel: false
       group:
-        kind: run
+        kind: build
         isDefault: true
