@@ -21,20 +21,15 @@ commands:
     exec:
       label: "Setup and Activate Virtual Environment"
       component: python
-      workingDir: "${PROJECT_SOURCE}"
-      commandLine: "python3.11 -m venv /home/user/.venv && echo 'source /home/user/.venv/bin/activate' >> /home/user/.bashrc"
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: 'python3.11 -m venv /home/user/.venv && echo 'source /home/user/.venv/bin/activate' >> /home/user/.bashrc'
+      group:
+        kind: run
   - id: run
     exec:
       label: "Run the application"
       component: python
-      workingDir: "${PROJECT_SOURCE}"
-      commandLine: "source /home/user/.venv/bin/activate && python hello-world.py"
-  - id: setupandrun
-    composite:
-      commands:
-        - setup
-        - run
-      parallel: false
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: 'source /home/user/.venv/bin/activate && python hello-world.py'
       group:
-        kind: build
-        isDefault: true
+        kind: run
