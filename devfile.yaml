@@ -1,44 +1,42 @@
-schemaVersion: 2.1.0
+schemaVersion: 2.2.2
 metadata:
-  name: version
+  name: python-hello-world
 components:
-  - container:
-      command:
-        - /entrypoint-init-container.sh
-      cpuLimit: 500m
-      cpuRequest: 30m
-      image: quay.io/che-incubator/che-code
-      args: ['tail', '-f', '/dev/null']
-      memoryLimit: 256Mi
-      memoryRequest: 32Mi
+  - name: python
+    container:
+      image: registry.redhat.io/devspaces/udi-rhel9:3.19
       volumeMounts:
-        - name: checode
-          path: /checode
-    name: che-code-injector
-  # - name: tools
-  #   container:
-  #     image: quay.io/che-incubator/che-code
-  #     args: ['tail', '-f', '/dev/null']
-  #     endpoints:
-  #       - exposure: public
-  #         name: nodejs
-  #         protocol: http
-  #         targetPort: 3000
-  #     memoryLimit: 2Gi
-  #     memoryRequest: 256Mi
-  #     mountSources: true
-  #     env:
-  #       - name: VSCODE_TRUSTED_EXTENSIONS
-  #         value: "GitHub.copilot,GitHub.copilot-chat"
-  # - container:
-  #     command:
-  #       - /entrypoint-init-container.sh
-  #     cpuLimit: 500m
-  #     cpuRequest: 30m
-  #     image: quay.io/che-incubator/che-code
-  #     memoryLimit: 256Mi
-  #     memoryRequest: 32Mi
-  #     volumeMounts:
-  #       - name: checode
-  #         path: /checode
-  #   name: che-code-injector
+        - name: venv
+          path: /home/user/.venv
+      memoryLimit: '2Gi'
+      memoryRequest: '1Gi'
+      cpuLimit: '2'
+      cpuRequest: '1'
+      mountSources: true
+  - name: venv
+    volume:
+      size: 1G
+commands:
+  - id: setup-venv
+    exec:
+      label: "Setup and Activate Virtual Environment"
+      component: python
+      workingDir: '${PROJECTS_ROOT}'
+      commandLine: '/bin/bash -c "python3.11 -m venv /home/user/.venv && echo 'source /home/user/.venv/bin/activate' >> /home/user/.bashrc"'
+      group:
+        kind: build
+        isDefault: true
+  - id: run-app
+    exec:
+      label: "Run the application"
+      component: python
+      workingDir: '${PROJECTS_ROOT}'
+      commandLine: '/bin/bash -c "source /home/user/.venv/bin/activate && python hello-world.py"'
+      group:
+        kind: build
+  - id: setupandrun
+    composite:
+      commands:
+        - setup-venv
+        - run-app
+      parallel: false
