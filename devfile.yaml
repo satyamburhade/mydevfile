@@ -24,8 +24,7 @@ commands:
       workingDir: ${PROJECT_SOURCE}
       commandLine: python3.11 -m venv /home/user/.venv && echo 'source /home/user/.venv/bin/activate' >> /home/user/.bashrc
       group:
-        kind: build
-        isDefault: true
+        kind: run
   - id: run-app
     exec:
       label: "Run the application"
@@ -33,7 +32,7 @@ commands:
       workingDir: ${PROJECT_SOURCE}
       commandLine: source /home/user/.venv/bin/activate && python hello-world.py
       group:
-        kind: build
+        kind: run
   - id: setupandrun
     composite:
       commands:
