@@ -32,8 +32,8 @@ commands:
   - id: setupandrun
     composite:
       commands:
-        - setup-venv
-        - run-app
+        - setup
+        - run
       parallel: false
       group:
         kind: build
