@@ -17,18 +17,18 @@ components:
     volume:
       size: 1G
 commands:
-  - id: setup-venv
+  - id: setup
     exec:
       label: "Setup and Activate Virtual Environment"
       component: python
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: python3.11 -m venv /home/user/.venv && echo 'source /home/user/.venv/bin/activate' >> /home/user/.bashrc
-  - id: run-app
+      workingDir: "${PROJECT_SOURCE}"
+      commandLine: "python3.11 -m venv /home/user/.venv && echo 'source /home/user/.venv/bin/activate' >> /home/user/.bashrc"
+  - id: run
     exec:
       label: "Run the application"
       component: python
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: source /home/user/.venv/bin/activate && python hello-world.py
+      workingDir: "${PROJECT_SOURCE}"
+      commandLine: "source /home/user/.venv/bin/activate && python hello-world.py"
   - id: setupandrun
     composite:
       commands:
