@@ -33,3 +33,7 @@ commands:
       commandLine: source /home/user/.venv/bin/activate && python hello-world.py
       group:
         kind: run
+events:
+  postStart:
+    - setup
+    - run
