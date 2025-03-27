@@ -22,7 +22,6 @@ commands:
       commands:
         - setup
         - run
-      parallel: false
   - id: setup
     exec:
       label: "Setup and Activate Virtual Environment"
