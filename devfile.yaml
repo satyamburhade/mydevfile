@@ -22,7 +22,7 @@ commands:
       label: "Setup and Activate Virtual Environment"
       component: python
       workingDir: ${PROJECT_SOURCE}
-      commandLine: source /home/user/.bashrc && python3.11 -m venv /home/user/.venv && echo 'source /home/user/.venv/bin/activate' >> /home/user/.bashrc
+      commandLine: source /home/user/.bashrc && python3.11 -m venv /home/user/.venv
   - id: run
     exec:
       label: "Run the application"
