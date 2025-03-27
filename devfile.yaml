@@ -17,15 +17,21 @@ components:
     volume:
       size: 1G
 commands:
+  - id: installandpackage
+    composite:
+      commands:
+        - setup
+        - run
+      parallel: false
   - id: setup
     exec:
       label: "Setup and Activate Virtual Environment"
       component: python
       workingDir: ${PROJECT_SOURCE}
-      commandLine: source /home/user/.bashrc && python3.11 -m venv /home/user/.venv
+      commandLine: bash -c '{ source /home/user/.bashrc && python3.11 -m venv /home/user/.venv }'
   - id: run
     exec:
       label: "Run the application"
       component: python
       workingDir: ${PROJECT_SOURCE}
-      commandLine: source /home/user/.venv/bin/activate && python hello-world.py
+      commandLine: bash -c '{ source /home/user/.venv/bin/activate && python hello-world.py }'
