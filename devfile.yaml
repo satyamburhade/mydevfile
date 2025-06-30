@@ -1,40 +1,46 @@
 schemaVersion: 2.2.2
 metadata:
   name: python-hello-world
+projects:
+  - name: python-hello-world
+    clonePath: resources/my-project
+    git:
+      remotes:
+        origin: https://github.com/satyamburhade/mydevfile.git
+  - name: python-hello-world
+    git:
+      remotes:
+        origin: https://github.com/satyamburhade/mydevfile.git
 components:
-  - name: python
+  - name: tools
     container:
-      image: registry.redhat.io/devspaces/udi-rhel9:3.19
-      volumeMounts:
-        - name: venv
-          path: /home/user/.venv
-      memoryLimit: '2Gi'
-      memoryRequest: '1Gi'
-      cpuLimit: '2'
-      cpuRequest: '1'
+      image: registry.redhat.io/devspaces/udi-rhel9@sha256:cca6cbf5adcb5ce83392795573fe258d468568bddc3ad3618297e9e6234cfb79
+      memoryLimit: 1G
       mountSources: true
-  - name: venv
-    volume:
-      size: 1G
 commands:
-  # - id: installandpackage
-  #   composite:
-  #     commands:
-  #       - setup
-  #       - run
-  - id: setup
+  - id: buildah
     exec:
-      label: "Setup and Activate Virtual Environment"
-      component: python
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: |
-        source /home/user/.bashrc 
-        python3.11 -m venv /home/user/.venv
+      label: "Build application"
+      component: tools
+      workingDir: "${PROJECT_SOURCE}"
+      commandLine: mkdir -p /projects/resources/my-project
+      group:
+        kind: build
+        isDefault: true
+  - id: build
+    exec:
+      label: "Build application"
+      component: tools
+      workingDir: "${PROJECT_SOURCE}"
+      commandLine: g++ -g hello.cpp -o hello.out && echo "Build complete"
+      group:
+        kind: build
+        isDefault: true
   - id: run
     exec:
-      label: "Run the application"
-      component: python
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: | 
-        bash -c '{ source /home/user/.bashrc 
-        source /home/user/.venv/bin/activate && python hello-world.py }'
+      label: "Run application"
+      component: tools
+      workingDir: "${PROJECT_SOURCE}"
+      commandLine: "./hello.out"
+      group:
+        kind: run
