@@ -3,7 +3,7 @@ metadata:
   name: python-hello-world
 projects:
   - name: python-hello
-    clonePath: /projects/resources/my-project
+    clonePath: ../resources/my-project
     git:
       remotes:
         origin: https://github.com/satyamburhade/mydevfile.git
@@ -22,7 +22,7 @@ commands:
     exec:
       label: "Build application"
       component: tools
-      commandLine: mkdir -p /projects/resources/my-project
+      commandLine: mkdir -p ../resources/my-project
       group:
         kind: build
         isDefault: true
