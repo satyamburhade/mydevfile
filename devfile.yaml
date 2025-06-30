@@ -2,7 +2,7 @@ schemaVersion: 2.2.2
 metadata:
   name: python-hello-world
 projects:
-  - name: python-hello-world
+  - name: python-hello
     clonePath: resources/my-project
     git:
       remotes:
