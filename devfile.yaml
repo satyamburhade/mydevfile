@@ -3,7 +3,7 @@ metadata:
   name: python-hello-world
 projects:
   - name: python-hello
-    clonePath: resources/my-project
+    clonePath: /projects/resources/my-project
     git:
       remotes:
         origin: https://github.com/satyamburhade/mydevfile.git
