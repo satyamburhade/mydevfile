@@ -1,45 +1,35 @@
-schemaVersion: 2.2.2
+schemaVersion: 2.2.0
 metadata:
-  name: python-hello-world
+  name: yq-installer
 projects:
-  - name: python-hello
-    clonePath: ../resources/my-project
-    git:
-      remotes:
-        origin: https://github.com/satyamburhade/mydevfile.git
   - name: python-hello-world
-    git:
-      remotes:
-        origin: https://github.com/satyamburhade/mydevfile.git
+    zip:
+      location: http://devspaces-dashboard.openshift-devspaces.svc:8080/dashboard/api/airgap-sample/project/download?id=python
 components:
-  - name: tools
+  - name: python
     container:
-      image: registry.redhat.io/devspaces/udi-rhel9@sha256:cca6cbf5adcb5ce83392795573fe258d468568bddc3ad3618297e9e6234cfb79
-      memoryLimit: 1G
+      image: registry.redhat.io/devspaces/udi-rhel9@sha256:f7325ee7259a0585e8017d4442d778a37f4c8a67d81fe70c241a014001e37539
+      volumeMounts:
+        - name: venv
+          path: /home/user/.venv
+      memoryLimit: 2Gi
+      memoryRequest: 1Gi
+      cpuLimit: '2'
+      cpuRequest: '1'
       mountSources: true
+  - name: venv
+    volume:
+      size: 1G
 commands:
-  - id: buildah
+  - id: install-yq
     exec:
-      label: "Build application"
-      component: tools
-      commandLine: mkdir -p ../resources/my-project
+      component: yq-container
+      commandLine: |
+        YQ_VERSION=v4.44.2 # Replace with the desired yq version
+        YQ_BINARY=yq_linux_amd64
+        wget "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -O /usr/local/bin/yq
+        chmod +x /usr/local/bin/yq
+      workingDir: /home/user
       group:
         kind: build
         isDefault: true
-  - id: build
-    exec:
-      label: "Build application"
-      component: tools
-      workingDir: "${PROJECT_SOURCE}"
-      commandLine: g++ -g hello.cpp -o hello.out && echo "Build complete"
-      group:
-        kind: build
-        isDefault: true
-  - id: run
-    exec:
-      label: "Run application"
-      component: tools
-      workingDir: "${PROJECT_SOURCE}"
-      commandLine: "./hello.out"
-      group:
-        kind: run
